@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\PeliculaController;
-use App\Http\Middleware\TestYear;
+use App\Http\Controllers\FilmController;
+use App\Http\Middleware\ValidateYear;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,10 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::group(['prefix'=>'filmout'], function(){
-    //Aquí se definirán el conjunto de rutas bajo el prefijo "filmout"
-    Route::get('pelisAntiguas/{year?}',[PeliculaController::class, "listOldFilms"])->name('oldFilms');
-    Route::get('pelisNuevas/{year?}',[PeliculaController::class, "listNewFilms"])->name('newFilms');
-    Route::get('pelis/{year?}/{categoria?}',[PeliculaController::class, "listFilms"])->name('listFilms');
+Route::middleware('year')->group(function() {
+    Route::group(['prefix'=>'filmout'], function(){
+        // Routes included with prefix "filmout"
+        Route::get('oldFilms/{year?}',[FilmController::class, "listOldFilms"])->name('oldFilms');
+        Route::get('newFilms/{year?}',[FilmController::class, "listNewFilms"])->name('newFilms');
+        Route::get('films/{year?}/{genre?}',[FilmController::class, "listFilms"])->name('listFilms');
+    });
 });
+
+

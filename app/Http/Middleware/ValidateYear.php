@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class TestYear
+class ValidateYear
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,14 @@ class TestYear
      */
     public function handle(Request $request, Closure $next)
     {
-        $year = $request->header('anyo');
-        if(is_null($year) || $year == 2000){
-            return redirect('/filmout/pelisAntiguas');
+        $year = $request->route('year');
+
+        // in case year is not numeric go to homepage
+        if(isset($year)){
+            if(is_null($year) || !is_numeric($year)){
+                  return redirect('/');
+            }
         }
-        return $next($request);
+        return $next($request);        
     }
 }
