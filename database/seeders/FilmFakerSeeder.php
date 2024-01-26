@@ -24,7 +24,7 @@ class FilmFakerSeeder extends Seeder
                 'year' => $faker->numberBetween(1900, date('Y')),
                 'genre' => $faker->word,
                 'country' => $faker->country,
-                'duration' => $faker->randomFloat(2, 60, 180), // Duración entre 60 y 180 minutos
+                'duration' => $faker->numberBetween(60, 180), // Duración entre 60 y 180 minutos
                 'img_url' => $faker->imageUrl(640, 480),
                 'created_at' => now(),
                 'updated_at' => now(),
