@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('year');
             $table->string('genre', 50);
             $table->string('country', 30);
-            $table->decimal('duration', 5, 2); // Adjust the precision and scale as needed
+            $table->unsignedInteger('duration'); // Change data type to unsigned integer
             $table->string('img_url', 255);
             $table->timestamps();
         });
