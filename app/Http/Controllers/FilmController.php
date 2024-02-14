@@ -165,8 +165,8 @@ public function createFilm()
             "genre" => $_POST["genre"],
             "img_url" => $_POST["img_url"]
         ];
-    $films[]= $film;
         if($source === 'json'){
+            $films[]= $film;
             Storage::put("/public/films.json", json_encode($films));
         dd("existe");
                 }else{
