@@ -24,6 +24,19 @@
         {{ session('error') }}
     </div>
     @endif
+    <form action="{{ route('listActorsByDecade') }}" method="get">
+            @csrf
+            <label for="decade">Select Decade:</label>
+            <select class="form-control" id="decade" name="decade" required>
+                <option value="1970">1970</option>
+                <option value="1980">1980</option>
+                <option value="1990">1990</option>
+                <option value="2000">2000</option>
+                <option value="2010">2010</option>
+                <option value="2020">2020</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
     <div class="container mt-5">
         <h2>Añadir Película</h2>
         <form action="{{ route('createFilm') }}" method="post">
