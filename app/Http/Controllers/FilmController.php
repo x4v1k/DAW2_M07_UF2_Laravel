@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class FilmController extends Controller
 {
@@ -11,7 +13,11 @@ class FilmController extends Controller
      * Read films from storage
      */
     public static function readFilms(): array {
-        $films = Storage::json('/public/films.json');
+        $filmsJson = Storage::get('public/films.json');
+        $filmsJson1 = json_decode($filmsJson,true);
+        $filmsDB = DB::table('films')->select('name','year','genre','country','duration','img_url')->get();
+        $filmsArray = json_decode(json_encode($filmsDB),true);
+        $films = array_merge($filmsJson1,$filmsArray);
         return $films;
     }
     /**
@@ -140,26 +146,38 @@ public function countFilms()
     return view('films.count', ['totalFilms' => $totalFilms]);
 }
 
-public function createFilm(Request $request)
+public function createFilm()
 {
-   
-    $pelicula = $request->all();
+    $peliculaExist = FilmController::isFilm($_POST["name"]);
+    $title = "Peliculas";
+    $source = env('DATA_SOURCE','database');
 
-    if(!FilmController::isFilm($pelicula['name'])){
-        $films = FilmController::readFilms();
-        unset($pelicula["_token"]);
-        $films[]= $pelicula;
-        $filmsJson = json_encode($films);
-        Storage::put('/public/films.json',$filmsJson);
-        return FilmController::listFilms();
-        
+    if($peliculaExist){
+        return view('welcome',["Error" => "Esta pelicula ya existe"]);
+        dd("existe");
     }else{
-        return redirect('/')->with('error', 'El nombre de la pelicula ya está registrado');
+        $films = FilmController::readFilms();
+        $film = [
+            "name" => $_POST["name"],
+            "country" => $_POST["country"],
+            "duration" => $_POST["duration"],
+            "year" => $_POST["year"],
+            "genre" => $_POST["genre"],
+            "img_url" => $_POST["img_url"]
+        ];
+    $films[]= $film;
+        if($source === 'json'){
+            Storage::put("/public/films.json", json_encode($films));
+        dd("existe");
+                }else{
+                    DB::table('films')->insert($film);
+                }
+                $films = FilmController::readFilms();
+                return view('films.list', ["films" => $films, "title" => $title]);
+               
+            }
     }
     
-    
-
-}
 
 public function isFilm($nombre):bool
 {

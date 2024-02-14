@@ -27,6 +27,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/filmout/countFilms">Total de peliculas</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/actorout/actors">Actores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/actorout/countActors">Numero de actores</a>
+                </li>
             </ul>
         </div>
     </nav>
